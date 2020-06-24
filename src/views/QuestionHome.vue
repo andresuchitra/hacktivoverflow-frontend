@@ -11,19 +11,16 @@
 </template>
 
 <script>
-import QuestionsList from '@/components/QuestionsList.vue'
-import WatchedTags from '@/components/WatchedTags.vue'
+import QuestionsList from '@/components/QuestionsList.vue';
+import WatchedTags from '@/components/WatchedTags.vue';
 
 export default {
-    name: 'QuestionHome',
-    components: {
-        QuestionsList,
-        WatchedTags,
-    },
-    mounted() {
-        this.$store.dispatch('getUser');
-    }
-}
+  name: 'QuestionHome',
+  components: {
+    QuestionsList,
+    WatchedTags,
+  },
+};
 </script>
 
 <style scoped>

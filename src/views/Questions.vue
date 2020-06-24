@@ -8,11 +8,8 @@
 
 <script>
 export default {
-    name: 'Questions',
-    mounted() {
-        this.$store.dispatch('getUser');
-    }
-}
+  name: 'Questions',
+};
 
 </script>
 

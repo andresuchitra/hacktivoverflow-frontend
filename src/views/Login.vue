@@ -92,7 +92,7 @@ export default {
     ],
   }),
   mounted() {
-    console.log(this.$route.query.code);
+    console.log(`query -> ${this.$route.query.code}`);
     if (this.$route.query.code && this.$route.query.state && this.$route.query.state.includes('yaya')) {
       this.githubCode = this.$route.query.code;
       this.authGithub();

@@ -206,10 +206,11 @@ export default new Vuex.Store({
           context.commit('setTags', data);
         })
         .catch((err) => {
+          let msg = err.message;
           if (err.response) {
-            err = err.response.data;
+            msg = err.response.data;
           }
-          console.log(err)
+          console.log(msg);
         });
     },
   },

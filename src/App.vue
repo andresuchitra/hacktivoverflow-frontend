@@ -36,7 +36,8 @@
       </v-toolbar-items>
       <v-btn v-if="!$store.state.isLogin" to="/register" flat>Register</v-btn>
       <v-btn v-if="!$store.state.isLogin" to="/login" color="red" small dark>Login</v-btn>
-      <v-btn v-if="$store.state.isLogin" @click="logout" class="red smallbtn" small dark>Logout</v-btn>
+      <v-btn v-if="$store.state.isLogin"
+        @click="logout" class="red smallbtn" small dark>Logout</v-btn>
     </v-toolbar>
     <v-content class="mainContent">
       <v-layout row>
@@ -52,7 +53,8 @@
 </template>
 
 <script>
-import Sidebar from '@/components/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
@@ -62,39 +64,39 @@ export default {
   data() {
     return {
       searchKey: '',
-    }
+    };
   },
   mounted() {
-    this.$store.dispatch('getUser');
-    
-    if(localStorage.getItem('hackflow_token')) {
-      this.$store.commit('setIsLogin', true)
+    if (localStorage.getItem('hackflow_token')) {
+      this.$store.dispatch('getUser');
+      this.$store.commit('setIsLogin', true);
     }
-    this.$store.dispatch('getTags')
+    this.$store.dispatch('getTags');
   },
   computed: {
-    username: function() {
-      if(!this.$store.state.user) {
-        return 'default-user'
+    ...mapState(['user']),
+    username() {
+      if (!this.user) {
+        return 'default-user';
       }
-      return this.$store.state.user.firstname
-    }
+      return this.user.firstname;
+    },
   },
   methods: {
     search() {
       console.log('search..');
-      if(this.searchKey) {
-        this.$router.push('/questions/search/' + this.searchKey);
+      if (this.searchKey) {
+        this.$router.push(`/questions/search/${this.searchKey}`);
       }
     },
     logout() {
-      localStorage.removeItem('hackflow_token')
-      this.$store.commit('setIsLogin', false)
-      this.$store.commit('setUser', null)
-      this.$router.push('/')
+      localStorage.removeItem('hackflow_token');
+      this.$store.commit('setIsLogin', false);
+      this.$store.commit('setUser', null);
+      this.$router.push('/');
     },
-  }
-}
+  },
+};
 </script>
 <style scoped>
 .logo {
