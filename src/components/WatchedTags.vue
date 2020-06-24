@@ -25,7 +25,9 @@
               color="blue lighten-4"
               @input="removeWatchTag(tag)"
             >
-              <router-link class="tag" :to="'questions/tagged/' + tag.name">{{tag.name}}</router-link>
+              <router-link class="tag"
+                :to="'questions/tagged/' + tag.name">
+                {{tag.name}}</router-link>
             </v-chip>
           </div>
         </v-layout>
@@ -57,7 +59,10 @@
               </template>
             </template>
           </v-autocomplete>
-          <v-btn type="button" color="orange darken-4" dark @click="addWatchTag">Add Watch Tag</v-btn>
+          <v-btn type="button"
+            color="orange darken-4"
+            dark
+            @click="addWatchTag">Add Watch Tag</v-btn>
         </v-layout>
       </v-layout>
     </v-layout>
@@ -66,82 +71,83 @@
 <script>
 import http from '@/api/http';
 import swal from 'sweetalert2';
+import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
-      selection: "",
+      selection: '',
       watchedTags: [],
       editMode: false,
-      newTag: "",
-      availableTags: []
+      newTag: '',
+      availableTags: [],
     };
   },
+  computed: mapState(['user']),
   watch: {
-    '$store.state.user'(old, newval) {
-      console.log('watch user tags..', newval);
-      this.watchedTags = [...newval.tags]
-    }
+    user: (old, newval) => {
+      this.watchedTags = [...newval.tags];
+    },
   },
   methods: {
-    remove(item) {
-      this.selection = "";
+    remove() {
+      this.selection = '';
     },
     removeWatchTag(tag) {
       http
-        .delete("/auth/user/removetag/" + tag.name, {
+        .delete(`/auth/user/removetag/${tag.name}`, {
           headers: {
-            Authorization: localStorage.getItem("hackflow_token")
-          }
+            Authorization: localStorage.getItem('hackflow_token'),
+          },
         })
         .then(({ data }) => {
-          swal.fire("Success", "Tag has been removed", "success");
+          swal.fire('Success', 'Tag has been removed', 'success');
           this.watchedTags = this.watchedTags.filter(x => x.name !== data.name);
         })
-        .catch(err => {
-          console.log(err);
+        .catch((err) => {
+          let msg = '';
           if (err.response) {
-            err = err.response.data;
+            msg = err.response.data;
           }
-          swal.fire("Error", err.toString(), "error");
+          swal.fire('Error', msg, 'error');
         });
     },
-    addWatchTag(tag) {
+    addWatchTag() {
       http
-        .patch("/auth/user/addtag/" + this.selection, {}, {
+        .patch(`/auth/user/addtag/${this.selection}`, {}, {
           headers: {
-            Authorization: localStorage.getItem("hackflow_token")
-          }
+            Authorization: localStorage.getItem('hackflow_token'),
+          },
         })
         .then(({ data }) => {
-          swal.fire("Success", "Tag has been added", "success");
-          this.selection = "";
-          this.watchedTags.push(data)
+          swal.fire('Success', 'Tag has been added', 'success');
+          this.selection = '';
+          this.watchedTags.push(data);
         })
-        .catch(err => {
-          console.log(err);
+        .catch((err) => {
+          let msg = '';
           if (err.response) {
-            err = err.response.data;
+            msg = err.response.data;
           }
-          swal.fire("Error", err.toString(), "error");
+          swal.fire('Error', msg.toString(), 'error');
         });
-    }
+    },
   },
   mounted() {
     http
-      .get("tags")
+      .get('tags')
       .then(({ data }) => {
-        this.$store.commit("setTags", data);
+        this.$store.commit('setTags', data);
         this.availableTags = data;
       })
-      .catch(err => {
-        console.log(err);
+      .catch((err) => {
+        let msg = '';
         if (err.response) {
-          err = err.response.data;
+          msg = err.response.data;
         }
-        swal.fire("Error", err.toString(), "error");
+        swal.fire('Error', msg, 'error');
       });
-  }
+  },
 };
 </script>
 <style scoped>
@@ -176,4 +182,3 @@ export default {
   text-decoration: none;
 }
 </style>
-
