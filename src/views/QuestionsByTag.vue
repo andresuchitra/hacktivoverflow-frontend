@@ -24,31 +24,31 @@ export default {
   },
   watch: {
     $route(newv, oldv) {
-      let tag = newv;
       console.log('old..', oldv);
       console.log('new tag ...', newv);
       this.getQuestionsByTag(newv.params.tag);
-    }
+    },
   },
   methods: {
-    getQuestionsByTag(tag) {
-      if(!tag) {
-        tag = this.$route.params.tag
+    getQuestionsByTag(selectedTag) {
+      const { tag } = this.$route.params;
+
+      if (selectedTag && tag) {
+        http
+          .get(`/questions/tagged/${tag.toLowerCase()}`)
+          .then(({ data }) => {
+            this.$store.commit('setQuestions', data);
+          })
+          .catch((err) => {
+            let msg = err;
+            if (err.response) {
+              msg = err.response.data;
+            }
+            swal.fire('Error', msg, 'error');
+          });
       }
-      http
-        .get('/questions/tagged/' + tag.toLowerCase())
-        .then(({ data }) => {
-          this.$store.commit('setQuestions', data);
-        })
-        .catch(err => {
-          console.log(err);
-          if (err.response) {
-            err = err.response.data;
-          }
-          swal.fire('Error', err.toString(), 'error');
-        });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

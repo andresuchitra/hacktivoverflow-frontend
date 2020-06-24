@@ -49,10 +49,12 @@ export default {
           this.clearForm();
         })
         .catch((err) => {
+          let msg = err.message;
+
           if (err.response) {
-            err = err.response.data;
+            msg = err.response.data;
           }
-          swal.fire('Error', err.message, 'error');
+          swal.fire('Error', msg, 'error');
         });
     },
   },

@@ -85,7 +85,7 @@ export default {
   },
   computed: mapState(['user']),
   watch: {
-    user: (old, newval) => {
+    user: (newval) => {
       this.watchedTags = [...newval.tags];
     },
   },

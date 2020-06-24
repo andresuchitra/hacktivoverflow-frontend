@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap mt-5 text-xs-center>
-      <loading :active.sync="$store.state.loading" 
+      <loading :active.sync="$store.state.loading"
         :can-cancel="true"
         :width="150"
         :height="150"
@@ -33,9 +33,16 @@
             <strong class="mx-2">OR</strong>
             <v-divider lg3></v-divider>
           </v-layout>
-          <button v-google-signin-button="clientId" type="button" class="google-signin-button"><i class="fab fa-google mr-2"></i>Google</button>
-          <v-btn dark color="black button" :href="initGithub"><i class="fab fa-github mr-2"></i>Github</v-btn>
-          <v-btn dark color="blue" :href="initLinkedIn"><i class="fab fa-linkedin mr-2"></i>LinkedIn</v-btn>
+          <button v-google-signin-button="clientId"
+            type="button" class="google-signin-button">
+            <i class="fab fa-google mr-2"></i>Google
+          </button>
+          <v-btn dark color="black button" :href="initGithub">
+            <i class="fab fa-github mr-2"></i>Github
+          </v-btn>
+          <v-btn dark color="blue" :href="initLinkedIn">
+            <i class="fab fa-linkedin mr-2"></i>LinkedIn
+          </v-btn>
         </v-form>
       </v-flex>
     </v-layout>
@@ -86,11 +93,10 @@ export default {
   }),
   mounted() {
     console.log(this.$route.query.code);
-    if(this.$route.query.code && this.$route.query.state && this.$route.query.state.includes('yaya')) {
+    if (this.$route.query.code && this.$route.query.state && this.$route.query.state.includes('yaya')) {
       this.githubCode = this.$route.query.code;
       this.authGithub();
-    }
-    else if(this.$route.query.code){
+    } else if (this.$route.query.code) {
       this.linkedInCode = this.$route.query.code;
       this.authLinkedIn();
     }
@@ -125,7 +131,7 @@ export default {
       }
     },
     OnGoogleAuthSuccess(idToken) {
-      axios.post(`${process.env.VUE_APP_SERVER_URL  }/auth/google`,
+      axios.post(`${process.env.VUE_APP_SERVER_URL}/auth/google`,
         {
           token: idToken,
         })
@@ -145,7 +151,7 @@ export default {
     },
     authGithub() {
       this.$store.commit('setLoading', true);
-      axios.post(`${process.env.VUE_APP_SERVER_URL  }/auth/github`,
+      axios.post(`${process.env.VUE_APP_SERVER_URL}/auth/github`,
         {
           code: this.githubCode,
         })

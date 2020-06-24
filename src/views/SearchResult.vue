@@ -23,30 +23,29 @@ export default {
     this.getQuestionsByTag();
   },
   watch: {
-    $route(newv, oldv) {
-      let tag = newv;
+    $route(newv) {
       this.searchQuestions(newv.params.key);
-    }
+    },
   },
   methods: {
-    searchQuestions(key) {
-      if(!key) {
-        key = this.$route.params.key
+    searchQuestions(selected) {
+      const { key } = this.$route.params;
+      if (selected && key) {
+        http
+          .get(`/questions/search/${key.toLowerCase()}`)
+          .then(({ data }) => {
+            this.$store.commit('setQuestions', data);
+          })
+          .catch((err) => {
+            let msg = '';
+            if (err.response) {
+              msg = err.response.data;
+            }
+            swal.fire('Error', msg, 'error');
+          });
       }
-      http
-        .get('/questions/search/' + key.toLowerCase())
-        .then(({ data }) => {
-          this.$store.commit('setQuestions', data);
-        })
-        .catch(err => {
-          console.log(err);
-          if (err.response) {
-            err = err.response.data;
-          }
-          swal.fire('Error', err.toString(), 'error');
-        });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
