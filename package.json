@@ -12,7 +12,7 @@
     "core-js": "^2.6.5",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "sweetalert2": "^8.19.0",
     "vue": "^2.6.10",
     "vue-google-signin-button": "^1.0.2",
